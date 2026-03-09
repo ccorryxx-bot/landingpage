@@ -1,218 +1,392 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Moonlight Christmas Edition</title>
-<link href="https://fonts.googleapis.com/css2?family=Pyidaungsu:wght@400;700&display=swap" rel="stylesheet">
-<style>
-*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-:root{--bg:#020617}
-body{font-family:'Pyidaungsu',sans-serif;background-color:#020617;overflow-x:hidden;min-height:100vh;transition:background .5s}
-body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellipse 80% 60% at 20% 0%,rgba(220,38,38,0.12),transparent 60%),radial-gradient(ellipse 60% 50% at 80% 100%,rgba(37,99,235,0.1),transparent 60%);pointer-events:none;z-index:0}
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Moonlight Christmas - Final Version</title>
+    <link href="https://fonts.googleapis.com/css2?family=Pyidaungsu:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        /* Global Styles */
+        * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+        body { 
+            font-family: 'Pyidaungsu', sans-serif; 
+            background-color: #020617; 
+            color: white; 
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
 
-#moon-element{position:absolute;top:40px;right:60px;width:90px;height:90px;background:radial-gradient(circle at 35% 35%,#ffffff,#e0e7ff);border-radius:50%;z-index:5;box-shadow:0 0 0 12px rgba(255,255,255,0.05),0 0 60px 20px rgba(255,255,255,0.3),0 0 120px 40px rgba(200,210,255,0.15);cursor:pointer;transition:transform .3s,box-shadow .3s;animation:moonPulse 4s ease-in-out infinite}
-#moon-element:hover{transform:scale(1.1)}
-@keyframes moonPulse{0%,100%{box-shadow:0 0 0 12px rgba(255,255,255,0.05),0 0 60px 20px rgba(255,255,255,0.3),0 0 120px 40px rgba(200,210,255,0.15)}50%{box-shadow:0 0 0 20px rgba(255,255,255,0.08),0 0 80px 30px rgba(255,255,255,0.4),0 0 160px 60px rgba(200,210,255,0.2)}}
+        /* Fairy Lights Decoration */
+        .fairy-lights {
+            position: fixed; top: 0; left: 0; width: 100%; display: flex; 
+            justify-content: space-around; padding: 10px 0; z-index: 100; pointer-events: none;
+        }
+        .light {
+            width: 12px; height: 12px; border-radius: 50%;
+            box-shadow: 0 0 15px 5px currentColor;
+            animation: blink 1.5s infinite alternate;
+        }
+        @keyframes blink {
+            0% { opacity: 0.3; transform: scale(0.8); }
+            100% { opacity: 1; transform: scale(1.2); }
+        }
 
-.star-container{position:fixed;inset:0;pointer-events:none;z-index:1}
-.star{position:absolute;border-radius:50%;opacity:0;animation:moveStar linear infinite}
-@keyframes moveStar{0%{transform:translateY(-20px);opacity:0}10%{opacity:1}90%{opacity:.8}100%{transform:translateY(105vh) translateX(20px);opacity:0}}
+        /* Moon and Stars Background */
+        #moon { 
+            position: absolute; top: 40px; right: 40px; width: 80px; height: 80px; 
+            background: #fff; border-radius: 50%; z-index: 5; 
+            box-shadow: 0 0 50px 15px rgba(255,255,255,0.3); 
+        }
+        .star-box { position: fixed; inset: 0; pointer-events: none; z-index: 1; }
+        .star { position: absolute; background: white; border-radius: 50%; opacity: 0.5; }
 
-.decoration-string{position:absolute;top:0;left:0;width:100%;height:220px;z-index:10;display:flex;justify-content:space-around;pointer-events:none}
-.hanging-item{width:1px;background:linear-gradient(to bottom,rgba(255,255,255,0),rgba(255,255,255,0.15));position:relative;transform-origin:top center;animation:swing 4s ease-in-out infinite}
-.hanging-item::after{content:'';position:absolute;bottom:-18px;left:-10px;width:22px;height:22px;border-radius:50%}
-.item-1::after{background:radial-gradient(circle at 30% 30%,#ff6b6b,#991b1b);box-shadow:0 0 12px rgba(255,50,50,0.6)}
-.item-2::after{background:radial-gradient(circle at 30% 30%,#fde68a,#b45309);box-shadow:0 0 12px rgba(250,200,0,0.6)}
-.item-3::after{background:radial-gradient(circle at 30% 30%,#6ee7b7,#065f46);box-shadow:0 0 12px rgba(50,220,120,0.6)}
-.item-4::after{background:radial-gradient(circle at 30% 30%,#93c5fd,#1e3a8a);box-shadow:0 0 12px rgba(50,150,255,0.6)}
-.item-5::after{background:radial-gradient(circle at 30% 30%,#fca5a5,#7f1d1d);box-shadow:0 0 12px rgba(255,100,100,0.5)}
-.item-6::after{background:radial-gradient(circle at 30% 30%,#c4b5fd,#4c1d95);box-shadow:0 0 12px rgba(160,100,255,0.6)}
-.item-7::after{background:radial-gradient(circle at 30% 30%,#fde68a,#b45309);box-shadow:0 0 12px rgba(250,200,0,0.6)}
-@keyframes swing{0%,100%{transform:rotate(5deg)}50%{transform:rotate(-5deg)}}
+        /* Main UI Layout */
+        main { position: relative; z-index: 20; max-width: 800px; margin: 0 auto; padding: 120px 20px 80px; text-align: center; }
+        
+        .banners { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 40px; }
+        @media(max-width: 600px){ .banners { grid-template-columns: 1fr; } }
+        .banner-item { 
+            height: 250px; border-radius: 25px; overflow: hidden; 
+            border: 2px solid rgba(255,255,255,0.1); background: #1e293b;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+        }
+        .banner-item img { width: 100%; height: 100%; object-fit: cover; }
 
-.fairy-lights{position:absolute;top:0;width:100%;display:flex;justify-content:space-evenly;padding-top:4px;z-index:11}
-.light{width:9px;height:9px;border-radius:50%;animation:blink 1s infinite alternate}
-@keyframes blink{from{opacity:.15;transform:scale(.7)}to{opacity:1;transform:scale(1.2)}}
+        #disp-title { font-size: 3rem; font-weight: 900; margin-bottom: 10px; transition: color 0.3s; }
+        #disp-sub { font-size: 1.1rem; color: #94a3b8; margin-bottom: 40px; line-height: 1.6; }
 
-main{position:relative;z-index:20;max-width:960px;margin:0 auto;padding:180px 24px 100px;display:flex;flex-direction:column;align-items:center;gap:72px}
+        /* Premium Gift Card Box */
+        .gift-card { 
+            background: rgba(255,255,255,0.05); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+            padding: 40px; border-radius: 35px; border: 1px solid rgba(250,204,21,0.3);
+            box-shadow: 0 25px 50px rgba(0,0,0,0.4); margin: 0 auto; max-width: 450px;
+        }
 
-.banner-grid{display:grid;grid-template-columns:1fr 1fr;gap:24px;width:100%}
-@media(max-width:600px){.banner-grid{grid-template-columns:1fr}}
-.banner-wrap{border-radius:32px;overflow:hidden;height:300px;background:#0f172a;position:relative;box-shadow:0 0 0 1px rgba(255,255,255,0.06),0 30px 60px rgba(0,0,0,0.6);transition:transform .3s,box-shadow .3s}
-.banner-wrap:hover{transform:translateY(-4px)}
-.banner-wrap::after{content:'';position:absolute;inset:0;background:linear-gradient(to top,rgba(2,6,23,0.4),transparent 50%);pointer-events:none}
-.banner-wrap img{width:100%;height:100%;object-fit:cover;display:block;transition:transform .5s}
-.banner-wrap:hover img{transform:scale(1.04)}
+        #draw-btn { 
+            width: 100%; padding: 20px; background: linear-gradient(to right, #dc2626, #991b1b); 
+            color: white; font-size: 1.2rem; font-weight: bold; border: none; border-radius: 18px; 
+            cursor: pointer; box-shadow: 0 10px 20px rgba(220,38,38,0.3);
+        }
+        #draw-btn:disabled { background: #475569; opacity: 0.6; box-shadow: none; cursor: not-allowed; }
 
-.text-block{text-align:center;max-width:600px}
-#disp-title{font-size:clamp(2.8rem,7vw,5rem);font-weight:900;background:linear-gradient(135deg,#ffffff 0%,#fde68a 40%,#ffffff 70%,#fcd34d 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;white-space:pre-wrap;line-height:1.15;margin-bottom:20px;filter:drop-shadow(0 0 40px rgba(253,230,138,0.3))}
-#disp-sub{font-size:1.2rem;color:rgba(255,255,255,0.5);white-space:pre-wrap;line-height:1.8;letter-spacing:.02em}
+        #result-box { 
+            margin-top: 30px; background: rgba(0,0,0,0.3); padding: 25px; border-radius: 20px; 
+            border: 2px dashed #facc15; animation: zoomIn 0.4s ease-out;
+        }
+        @keyframes zoomIn { from { transform: scale(0.9); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+        
+        .code-label { font-size: 0.8rem; color: #facc15; margin-bottom: 10px; letter-spacing: 2px; }
+        #disp-code { font-size: 2.5rem; font-weight: 900; letter-spacing: 3px; color: #fff; text-shadow: 0 0 15px #facc15; }
+        #copy-btn { margin-top: 15px; padding: 8px 25px; background: #facc15; border: none; border-radius: 50px; font-weight: bold; cursor: pointer; }
 
-.card{background:linear-gradient(145deg,rgba(255,255,255,0.06),rgba(255,255,255,0.02));backdrop-filter:blur(60px);padding:52px 44px;border-radius:40px;width:100%;max-width:480px;text-align:center;border:1px solid rgba(255,255,255,0.1);box-shadow:0 0 0 1px rgba(255,255,255,0.04) inset,0 40px 80px rgba(0,0,0,0.5),0 0 120px rgba(220,38,38,0.08);position:relative;overflow:hidden}
-.card::before{content:'';position:absolute;top:-80px;right:-80px;width:240px;height:240px;background:radial-gradient(circle,rgba(220,38,38,0.12),transparent 70%);pointer-events:none}
-.card::after{content:'';position:absolute;bottom:-60px;left:-60px;width:200px;height:200px;background:radial-gradient(circle,rgba(245,158,11,0.08),transparent 70%);pointer-events:none}
+        /* Admin Components */
+        #admin-btn { position: fixed; bottom: 20px; left: 20px; z-index: 100; opacity: 0.3; cursor: pointer; }
+        
+        /* Modals & Dashboard */
+        .modal { 
+            position: fixed; inset: 0; z-index: 1000; background: rgba(0,0,0,0.9); 
+            display: none; align-items: center; justify-content: center; padding: 20px;
+        }
+        .modal-content { background: white; color: #0f172a; padding: 30px; border-radius: 30px; width: 100%; max-width: 380px; text-align: center; }
+        
+        #dashboard { 
+            position: fixed; inset: 0; z-index: 2000; background: #f8fafc; color: #0f172a; 
+            display: none; padding: 30px; overflow-y: auto;
+        }
+        .dash-container { max-width: 700px; margin: 0 auto; }
+        .input-group { margin-bottom: 20px; text-align: left; }
+        label { display: block; font-weight: bold; font-size: 0.8rem; color: #64748b; margin-bottom: 5px; }
+        input, textarea { width: 100%; padding: 12px; border: 2px solid #e2e8f0; border-radius: 12px; font-family: inherit; }
+        
+        .img-upload { border: 2px dashed #cbd5e1; padding: 15px; border-radius: 15px; text-align: center; cursor: pointer; margin-top: 5px; }
+        .preview-img { width: 100%; height: 80px; object-fit: cover; border-radius: 10px; margin-top: 10px; }
 
-#lucky-btn{width:100%;padding:22px 28px;background:linear-gradient(135deg,#dc2626,#b91c1c,#991b1b);color:white;font-size:1.4rem;font-weight:700;border:none;border-radius:20px;box-shadow:0 0 0 1px rgba(255,255,255,0.1) inset,0 8px 32px rgba(220,38,38,0.5);cursor:pointer;transition:all .25s;font-family:'Pyidaungsu',sans-serif;position:relative;z-index:1;letter-spacing:.03em}
-#lucky-btn:hover{transform:translateY(-3px);box-shadow:0 0 0 1px rgba(255,255,255,0.15) inset,0 16px 48px rgba(220,38,38,0.6)}
-#lucky-btn:active{transform:scale(.98)}
-#lucky-btn:disabled{background:linear-gradient(135deg,#1e293b,#0f172a);box-shadow:none;cursor:not-allowed;opacity:.5;color:rgba(255,255,255,0.4)}
-
-#code-box{margin-top:32px;position:relative;background:linear-gradient(145deg,rgba(0,0,0,0.4),rgba(0,0,0,0.2));border-radius:24px;padding:28px 24px;border:1px solid rgba(245,158,11,0.2);box-shadow:0 0 60px rgba(245,158,11,0.06),inset 0 1px 0 rgba(245,158,11,0.1);animation:fadeUp .4s cubic-bezier(.16,1,.3,1)}
-.code-box-shine{position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,rgba(245,158,11,0.4),transparent)}
-@keyframes fadeUp{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:translateY(0)}}
-.code-label{color:rgba(255,255,255,0.3);font-size:.6rem;text-transform:uppercase;letter-spacing:.4em;margin-bottom:14px}
-#disp-code{font-size:2.8rem;font-weight:900;font-family:monospace;letter-spacing:.15em;background:linear-gradient(135deg,#fcd34d,#f59e0b,#fde68a);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;filter:drop-shadow(0 0 20px rgba(245,158,11,0.5))}
-#copy-btn{display:inline-flex;align-items:center;gap:8px;padding:11px 28px;margin-top:18px;background:rgba(245,158,11,0.1);border:1px solid rgba(245,158,11,0.25);color:#fcd34d;font-size:.9rem;border-radius:100px;cursor:pointer;transition:all .2s;font-family:'Pyidaungsu',sans-serif;font-weight:700}
-#copy-btn:hover{background:rgba(245,158,11,0.18);box-shadow:0 0 24px rgba(245,158,11,0.25);transform:translateY(-1px)}
-
-#disp-sign{margin-top:36px;font-style:italic;color:rgba(255,255,255,0.15);font-size:.95rem;white-space:pre-wrap;letter-spacing:.04em}
-
-#admin-trigger{position:fixed;bottom:28px;left:28px;z-index:50;width:52px;height:52px;display:flex;align-items:center;justify-content:center;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.12);border-radius:50%;cursor:pointer;transition:all .2s;backdrop-filter:blur(20px);box-shadow:0 8px 32px rgba(0,0,0,0.4)}
-#admin-trigger:hover{background:rgba(255,255,255,0.12);transform:scale(1.08)}
-
-.modal-overlay{position:fixed;inset:0;z-index:2000;background:rgba(0,0,0,0.85);backdrop-filter:blur(16px);display:flex;align-items:center;justify-content:center;padding:16px}
-
-.pw-card{background:linear-gradient(145deg,#1e293b,#0f172a);padding:40px 32px;border-radius:32px;max-width:360px;width:100%;text-align:center;box-shadow:0 40px 80px rgba(0,0,0,0.6);border:1px solid rgba(255,255,255,0.08)}
-.pw-icon{width:68px;height:68px;border-radius:50%;background:linear-gradient(135deg,rgba(37,99,235,0.2),rgba(37,99,235,0.05));border:1px solid rgba(37,99,235,0.3);display:flex;align-items:center;justify-content:center;margin:0 auto 20px;box-shadow:0 0 40px rgba(37,99,235,0.2)}
-.pw-title{font-size:1.5rem;font-weight:900;color:white;margin-bottom:8px}
-.pw-desc{font-size:.85rem;color:rgba(255,255,255,0.4);margin-bottom:28px;line-height:1.6}
-#admin-pw-input{width:100%;padding:16px;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);border-radius:14px;text-align:center;font-size:1.4rem;letter-spacing:.5em;margin-bottom:12px;font-family:'Pyidaungsu',sans-serif;color:white;outline:none;transition:border-color .2s}
-#admin-pw-input:focus{border-color:rgba(37,99,235,0.6);background:rgba(37,99,235,0.08)}
-#admin-pw-input::placeholder{color:rgba(255,255,255,0.2);letter-spacing:.1em}
-#pw-error{color:#f87171;font-size:.85rem;font-weight:700;margin-bottom:16px}
-.pw-btns{display:flex;gap:10px}
-#cancel-pw,#submit-pw{flex:1;padding:13px;border:none;border-radius:14px;font-weight:700;cursor:pointer;font-family:'Pyidaungsu',sans-serif;font-size:1rem;transition:all .2s}
-#cancel-pw{background:rgba(255,255,255,0.07);color:rgba(255,255,255,0.6);border:1px solid rgba(255,255,255,0.1)}
-#cancel-pw:hover{background:rgba(255,255,255,0.12)}
-#submit-pw{background:linear-gradient(135deg,#2563eb,#1d4ed8);color:white;box-shadow:0 4px 20px rgba(37,99,235,0.4)}
-#submit-pw:hover{box-shadow:0 6px 28px rgba(37,99,235,0.55);transform:translateY(-1px)}
-
-.nocode-card{background:linear-gradient(145deg,#1e293b,#0f172a);padding:40px 32px;border-radius:36px;max-width:400px;width:100%;text-align:center;box-shadow:0 40px 80px rgba(0,0,0,0.6);border:1px solid rgba(255,255,255,0.08);position:relative;overflow:hidden}
-.nocode-card::before{content:'';position:absolute;top:-40px;left:50%;transform:translateX(-50%);width:200px;height:200px;background:radial-gradient(circle,rgba(220,38,38,0.15),transparent 70%);pointer-events:none}
-.nocode-icon{font-size:3.5rem;margin-bottom:16px;display:block}
-.nocode-title{font-size:1.4rem;font-weight:900;color:white;margin-bottom:10px}
-.nocode-desc{font-size:.9rem;color:rgba(255,255,255,0.4);margin-bottom:28px;line-height:1.7}
-.nocode-contacts{display:flex;flex-direction:column;gap:10px;margin-bottom:24px}
-.contact-row{display:flex;align-items:center;gap:14px;background:rgba(255,255,255,0.04);border-radius:16px;padding:14px 18px;border:1px solid rgba(255,255,255,0.07)}
-.contact-icon{font-size:1.4rem;flex-shrink:0}
-.contact-text{color:white;font-size:1rem;font-weight:700;text-align:left}
-.contact-sub{font-size:.72rem;color:rgba(255,255,255,0.35);margin-top:2px}
-#close-nocode{width:100%;padding:14px;background:linear-gradient(135deg,#dc2626,#b91c1c);color:white;border:none;border-radius:16px;font-size:1rem;font-weight:700;cursor:pointer;font-family:'Pyidaungsu',sans-serif;transition:all .2s;box-shadow:0 4px 20px rgba(220,38,38,0.4)}
-#close-nocode:hover{transform:translateY(-2px);box-shadow:0 8px 28px rgba(220,38,38,0.5)}
-
-#admin-overlay{position:fixed;inset:0;z-index:1000;background:rgba(0,0,0,0.97);backdrop-filter:blur(24px);display:flex;align-items:center;justify-content:center;padding:20px}
-.admin-card{background:linear-gradient(145deg,#ffffff,#f8fafc);color:#0f172a;width:100%;max-width:920px;max-height:92vh;overflow-y:auto;border-radius:40px;padding:44px;box-shadow:0 0 0 1px rgba(0,0,0,0.05),0 60px 120px rgba(0,0,0,0.6)}
-.admin-card::-webkit-scrollbar{width:6px}
-.admin-card::-webkit-scrollbar-thumb{background:#e2e8f0;border-radius:10px}
-.admin-header{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:36px;padding-bottom:28px;border-bottom:2px solid #f1f5f9}
-.admin-title{font-size:1.9rem;font-weight:900;color:#0f172a;letter-spacing:-.02em}
-.admin-sub{font-size:.75rem;font-weight:700;color:#94a3b8;margin-top:4px;text-transform:uppercase;letter-spacing:.1em}
-#close-admin{width:44px;height:44px;display:flex;align-items:center;justify-content:center;background:#f1f5f9;border:none;border-radius:14px;font-size:1.2rem;font-weight:900;color:#94a3b8;cursor:pointer;transition:all .2s}
-#close-admin:hover{background:#fee2e2;color:#ef4444}
-.admin-grid{display:grid;grid-template-columns:1fr 1fr;gap:28px}
-@media(max-width:600px){.admin-grid{grid-template-columns:1fr}}
-.section-label{font-size:.6rem;font-weight:900;text-transform:uppercase;letter-spacing:.18em;margin-bottom:14px;padding:6px 12px;border-radius:8px;display:inline-block}
-.section-label.blue{color:#2563eb;background:#eff6ff}
-.section-label.red{color:#dc2626;background:#fef2f2}
-.section-label.green{color:#16a34a;background:#f0fdf4}
-.admin-box{background:#f8fafc;padding:20px;border-radius:18px;margin-bottom:14px;border:1px solid #e2e8f0}
-.admin-box label,.field-label{display:block;font-size:.6rem;font-weight:900;text-transform:uppercase;letter-spacing:.1em;color:#94a3b8;margin-bottom:8px}
-.color-row{display:grid;grid-template-columns:1fr 1fr;gap:12px}
-input[type="color"]{width:100%;height:44px;border-radius:10px;border:1px solid #e2e8f0;cursor:pointer;padding:4px}
-.admin-input{width:100%;padding:11px 14px;border:1.5px solid #e2e8f0;border-radius:12px;font-size:.85rem;font-family:'Pyidaungsu',sans-serif;outline:none;transition:border-color .2s,box-shadow .2s;background:white;color:#0f172a;resize:vertical}
-.admin-input:focus{border-color:#3b82f6;box-shadow:0 0 0 3px rgba(59,130,246,0.1)}
-.field-gap{margin-bottom:14px}
-.upload-label{display:block;width:100%;padding:11px;background:white;border:1.5px dashed #cbd5e1;border-radius:12px;cursor:pointer;font-family:'Pyidaungsu',sans-serif;font-size:.82rem;font-weight:700;color:#64748b;text-align:center;transition:all .2s}
-.upload-label:hover{border-color:#3b82f6;color:#2563eb;background:#f0f9ff}
-.img-preview{width:100%;height:90px;object-fit:cover;border-radius:10px;margin-top:8px;border:1.5px solid #e2e8f0}
-.hint{font-size:.6rem;color:#94a3b8;margin-top:6px}
-#save-settings{width:100%;margin-top:28px;padding:22px;background:linear-gradient(135deg,#0f172a,#1e293b);color:white;font-size:1rem;font-weight:900;border:none;border-radius:24px;cursor:pointer;transition:all .2s;display:flex;align-items:center;justify-content:center;gap:12px;font-family:'Pyidaungsu',sans-serif;box-shadow:0 8px 32px rgba(15,23,42,0.4);letter-spacing:.05em}
-#save-settings:hover{transform:translateY(-2px);box-shadow:0 14px 40px rgba(15,23,42,0.5)}
-
-#sys-toast{position:fixed;bottom:28px;left:50%;transform:translateX(-50%);color:white;padding:13px 32px;border-radius:100px;z-index:3000;font-weight:700;text-align:center;white-space:nowrap;pointer-events:none;opacity:0;transition:opacity .3s,bottom .3s;box-shadow:0 10px 40px rgba(0,0,0,0.4);font-size:.95rem}
-#sys-toast.show{opacity:1;bottom:40px}
-.hidden{display:none!important}
-</style>
+        #save-btn { width: 100%; padding: 18px; background: #0f172a; color: white; border: none; border-radius: 15px; font-weight: bold; margin-top: 20px; cursor: pointer; }
+        
+        /* Helpers */
+        .hidden { display: none !important; }
+        #toast { 
+            position: fixed; bottom: 40px; left: 50%; transform: translateX(-50%); 
+            background: #10b981; color: white; padding: 12px 30px; border-radius: 50px; 
+            z-index: 3000; display: none; font-weight: bold;
+        }
+    </style>
 </head>
 <body>
 
-<div id="moon-element" onclick="openPwModal()" title="Admin Dashboard"></div>
-<div id="star-canvas" class="star-container"></div>
-<div class="decoration-string">
-  <div class="hanging-item item-1" style="height:100px"></div>
-  <div class="hanging-item item-2" style="height:150px"></div>
-  <div class="hanging-item item-3" style="height:120px"></div>
-  <div class="hanging-item item-4" style="height:170px"></div>
-  <div class="hanging-item item-5" style="height:135px"></div>
-  <div class="hanging-item item-6" style="height:155px"></div>
-  <div class="hanging-item item-7" style="height:115px"></div>
-</div>
-<div class="fairy-lights" id="lights-container"></div>
+    <div class="fairy-lights" id="light-container"></div>
+    <div id="moon"></div>
+    <div class="star-box" id="star-container"></div>
 
-<button id="admin-trigger" onclick="openPwModal()" aria-label="Admin">
-  <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.7)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"/><circle cx="12" cy="12" r="3"/></svg>
-</button>
+    <div id="admin-btn" onclick="openLogin()">⚙️</div>
 
-<main>
-  <div class="banner-grid">
-    <div class="banner-wrap"><img id="img-1" src="https://images.unsplash.com/photo-1543589077-47d81606c1bf?w=800" alt="Banner 1"></div>
-    <div class="banner-wrap"><img id="img-2" src="https://images.unsplash.com/photo-1512389142860-9c449e58a543?w=800" alt="Banner 2"></div>
-  </div>
-  <div class="text-block">
-    <h1 id="disp-title">Merry Christmas</h1>
-    <p id="disp-sub">ပျော်ရွှင်စရာ ခရစ္စမတ်ကာလလေး ဖြစ်ပါစေ။</p>
-  </div>
-  <div class="card">
-    <button id="lucky-btn" onclick="generateCode()">ဒေါင်းလုဒ်ဆွဲရန်</button>
-    <div id="code-box" class="hidden">
-      <div class="code-box-shine"></div>
-      <p class="code-label">Your Unique Gift Code</p>
-      <div id="disp-code">-----</div>
-      <button id="copy-btn" onclick="copyCode()">
-        <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
-        ကော်ပီကူးယူပါ
-      </button>
+    <main>
+        <div class="banners">
+            <div class="banner-item"><img id="img1" src="https://images.unsplash.com/photo-1543589077-47d81606c1bf?w=800"></div>
+            <div class="banner-item"><img id="img2" src="https://images.unsplash.com/photo-1512389142860-9c449e58a543?w=800"></div>
+        </div>
+
+        <h1 id="disp-title">Merry Christmas</h1>
+        <p id="disp-sub">အားလုံးပဲ ပျော်ရွှင်စရာ ခရစ္စမတ်အခါသမယလေး ဖြစ်ပါစေ။</p>
+
+        <div class="gift-card">
+            <button id="draw-btn" onclick="handleDraw()">Gift Code ရယူရန်</button>
+            
+            <div id="result-box" class="hidden">
+                <p class="code-label">YOUR SPECIAL CODE</p>
+                <div id="disp-code">-----</div>
+                <button id="copy-btn" onclick="handleCopy()">Copy Code</button>
+            </div>
+            
+            <p id="disp-footer" style="margin-top:25px; opacity:0.3; font-size:0.8rem;">- Santa Admin -</p>
+        </div>
+    </main>
+
+    <!-- Login Modal -->
+    <div id="login-modal" class="modal">
+        <div class="modal-content">
+            <h3 style="margin-bottom:15px">Admin Login</h3>
+            <input type="password" id="admin-pw" placeholder="Enter Password" style="text-align:center; font-size:1.2rem;">
+            <p id="pw-error" class="hidden" style="color:red; font-size:0.8rem; margin:10px 0;">စကားဝှက် မှားယွင်းနေသည်။</p>
+            <div style="display:flex; gap:10px; margin-top:20px;">
+                <button onclick="closeModal('login-modal')" style="flex:1; padding:10px; border:none; border-radius:10px;">ပယ်ဖျက်</button>
+                <button onclick="checkLogin()" style="flex:1; padding:10px; border:none; border-radius:10px; background:#2563eb; color:white;">ဝင်မည်</button>
+            </div>
+        </div>
     </div>
-    <div id="disp-sign">- Admin Signature -</div>
-  </div>
-</main>
 
-<!-- Password Modal -->
-<div id="password-modal" class="modal-overlay hidden" onclick="bgClosePw(event)">
-  <div class="pw-card">
-    <div class="pw-icon">
-      <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="#3b82f6" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+    <!-- Out of Stock Modal -->
+    <div id="out-modal" class="modal">
+        <div class="modal-content">
+            <h2 style="color:#dc2626; margin-bottom:10px;">ကုန်သွားပါပြီ</h2>
+            <p style="color:#64748b; margin-bottom:20px;">ထပ်မံရယူရန် Admin ကို ဆက်သွယ်ပါ။</p>
+            <div id="contact-info" style="text-align:left; background:#f1f5f9; padding:15px; border-radius:15px;"></div>
+            <button onclick="closeModal('out-modal')" style="width:100%; margin-top:20px; padding:12px; border:none; background:#0f172a; color:white; border-radius:10px;">ပိတ်မည်</button>
+        </div>
     </div>
-    <p class="pw-title">Admin Security</p>
-    <p class="pw-desc">ကျေးဇူးပြု၍ Admin Password ကို ရိုက်ထည့်ပါ။</p>
-    <input type="password" id="admin-pw-input" placeholder="••••••" onkeydown="pwKeydown(event)">
-    <p id="pw-error" class="hidden" style="color:#f87171;font-size:.85rem;font-weight:700;margin-bottom:16px">မှားယွင်းနေပါသည်။ ပြန်လည်ကြိုးစားပါ။</p>
-    <div class="pw-btns">
-      <button id="cancel-pw" onclick="closePwModal()">Cancel</button>
-      <button id="submit-pw" onclick="submitPw()">Enter</button>
+
+    <!-- Admin Dashboard -->
+    <div id="dashboard">
+        <div class="dash-container">
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:30px;">
+                <h2>System Dashboard</h2>
+                <button onclick="closeDashboard()" style="padding:8px 15px; border-radius:8px; border:1px solid #ddd; background:white;">ထွက်မည်</button>
+            </div>
+
+            <div class="input-group">
+                <label>Main Title Text</label>
+                <input type="text" id="in-title">
+            </div>
+
+            <div class="input-group">
+                <label>Title Color</label>
+                <input type="color" id="in-color" style="height:50px; padding:5px; cursor:pointer;">
+            </div>
+
+            <div class="input-group">
+                <label>Subtitle Message</label>
+                <textarea id="in-sub" rows="3"></textarea>
+            </div>
+
+            <div style="display:grid; grid-template-columns:1fr 1fr; gap:20px;">
+                <div class="input-group">
+                    <label>Banner 1</label>
+                    <div class="img-upload" onclick="document.getElementById('f1').click()">
+                        <span>ပုံရွေးရန်</span>
+                        <input type="file" id="f1" class="hidden" accept="image/*" onchange="previewFile(this, 'pre1')">
+                        <img id="pre1" class="preview-img">
+                    </div>
+                </div>
+                <div class="input-group">
+                    <label>Banner 2</label>
+                    <div class="img-upload" onclick="document.getElementById('f2').click()">
+                        <span>ပုံရွေးရန်</span>
+                        <input type="file" id="f2" class="hidden" accept="image/*" onchange="previewFile(this, 'pre2')">
+                        <img id="pre2" class="preview-img">
+                    </div>
+                </div>
+            </div>
+
+            <div class="input-group">
+                <label>Gift Codes (တစ်ခုစီကို line ခြားပြီး ရေးပါ)</label>
+                <textarea id="in-codes" rows="5" placeholder="CODE-001&#10;CODE-002"></textarea>
+            </div>
+
+            <div class="input-group">
+                <label>Admin Phone</label>
+                <input type="text" id="in-phone">
+            </div>
+
+            <div class="input-group">
+                <label>Telegram Username</label>
+                <input type="text" id="in-tele">
+            </div>
+
+            <button id="save-btn" onclick="saveData()">Update System</button>
+        </div>
     </div>
-  </div>
-</div>
 
-<!-- No Codes Modal -->
-<div id="nocode-modal" class="modal-overlay hidden" onclick="bgCloseNocode(event)">
-  <div class="nocode-card">
-    <span class="nocode-icon">🎁</span>
-    <p class="nocode-title">Code များ ကုန်သွားပြီ</p>
-    <p class="nocode-desc">လောလောဆယ် ရရှိနိုင်သော Code မရှိတော့ပါ။<br>Admin ကို ဆက်သွယ်ပါ။</p>
-    <div class="nocode-contacts" id="nocode-contacts"></div>
-    <button id="close-nocode" onclick="closeNocodeModal()">ပိတ်မည်</button>
-  </div>
-</div>
+    <div id="toast">Saved Successfully!</div>
 
-<!-- Admin Panel -->
-<div id="admin-overlay" class="hidden" onclick="bgCloseAdmin(event)">
-  <div class="admin-card">
-    <div class="admin-header">
-      <div>
-        <div class="admin-title">System Dashboard</div>
-        <div class="admin-sub">Control Panel</div>
-      </div>
-      <button id="close-admin" onclick="closeAdmin()">✕</button>
-    </di
+    <script>
+        // --- Data State ---
+        var appData = {
+            title: "Merry Christmas",
+            titleColor: "#ffffff",
+            sub: "အားလုံးပဲ ပျော်ရွှင်စရာ ခရစ္စမတ်အခါသမယလေး ဖြစ်ပါစေ။",
+            img1: "https://images.unsplash.com/photo-1543589077-47d81606c1bf?w=800",
+            img2: "https://images.unsplash.com/photo-1512389142860-9c449e58a543?w=800",
+            codes: ["XMAS-GIFT-101", "XMAS-GIFT-202", "XMAS-GIFT-303"],
+            phone: "09 123 456 789",
+            tele: "@santa_admin"
+        };
+        var MASTER_PW = "1234";
+
+        // --- Initialization ---
+        window.onload = function() {
+            initDecorations();
+            refreshUI();
+        };
+
+        function initDecorations() {
+            var lbox = document.getElementById('light-container');
+            var colors = ['#ff4d4d', '#ffd700', '#4caf50', '#3498db', '#ffffff'];
+            for(var i=0; i<20; i++) {
+                var l = document.createElement('div');
+                l.className = 'light';
+                l.style.color = colors[i % colors.length];
+                l.style.animationDelay = (i * 0.1) + 's';
+                lbox.appendChild(l);
+            }
+            var sbox = document.getElementById('star-container');
+            for(var j=0; j<50; j++) {
+                var s = document.createElement('div');
+                s.className = 'star';
+                var size = Math.random() * 2 + 1;
+                s.style.width = size + 'px';
+                s.style.height = size + 'px';
+                s.style.top = Math.random() * 100 + 'vh';
+                s.style.left = Math.random() * 100 + 'vw';
+                sbox.appendChild(s);
+            }
+        }
+
+        // --- UI Sync Logic (ဒီအပိုင်းကို အဓိက လက်စသတ်ထားပါတယ်) ---
+        function refreshUI() {
+            // Update Main View
+            var t = document.getElementById('disp-title');
+            t.innerText = appData.title;
+            t.style.color = appData.titleColor;
+            document.getElementById('disp-sub').innerText = appData.sub;
+            document.getElementById('img1').src = appData.img1;
+            document.getElementById('img2').src = appData.img2;
+            document.getElementById('disp-footer').innerText = "- Santa Admin -";
+
+            // Update Dashboard Inputs to match current data
+            document.getElementById('in-title').value = appData.title;
+            document.getElementById('in-color').value = appData.titleColor;
+            document.getElementById('in-sub').value = appData.sub;
+            document.getElementById('in-codes').value = appData.codes.join('\n');
+            document.getElementById('in-phone').value = appData.phone;
+            document.getElementById('in-tele').value = appData.tele;
+            document.getElementById('pre1').src = appData.img1;
+            document.getElementById('pre2').src = appData.img2;
+        }
+
+        // --- File Preview & Store Base64 ---
+        function previewFile(input, preId) {
+            if (input.files && input.files[0]) {
+                var reader = new FileReader();
+                reader.onload = function(e) {
+                    var b64 = e.target.result;
+                    document.getElementById(preId).src = b64;
+                    // လက်ရှိ Dashboard view ထဲမှာတင် သိမ်းထားမယ်
+                    if(preId === 'pre1') appData.img1 = b64;
+                    if(preId === 'pre2') appData.img2 = b64;
+                };
+                reader.readAsDataURL(input.files[0]);
+            }
+        }
+
+        // --- Auth & Modals ---
+        function openLogin() { document.getElementById('login-modal').style.display = 'flex'; }
+        function closeModal(id) { document.getElementById(id).style.display = 'none'; }
+        
+        function checkLogin() {
+            var pw = document.getElementById('admin-pw').value;
+            if(pw === MASTER_PW) {
+                closeModal('login-modal');
+                document.getElementById('dashboard').style.display = 'block';
+                document.getElementById('admin-pw').value = "";
+                document.getElementById('pw-error').classList.add('hidden');
+                refreshUI(); // Dashboard ဖွင့်တိုင်း current data တွေပြမယ်
+            } else {
+                document.getElementById('pw-error').classList.remove('hidden');
+            }
+        }
+
+        function closeDashboard() { document.getElementById('dashboard').style.display = 'none'; }
+
+        // --- Dashboard Action ---
+        function saveData() {
+            // Inputs ထဲက တန်ဖိုးတွေကို appData ဆီ ပြောင်းသိမ်းမယ်
+            appData.title = document.getElementById('in-title').value;
+            appData.titleColor = document.getElementById('in-color').value;
+            appData.sub = document.getElementById('in-sub').value;
+            appData.phone = document.getElementById('in-phone').value;
+            appData.tele = document.getElementById('in-tele').value;
+            
+            var rawCodes = document.getElementById('in-codes').value.split('\n');
+            appData.codes = rawCodes.filter(function(c){ return c.trim() !== ""; });
+            
+            // UI ကို ချက်ချင်း update လုပ်မယ်
+            refreshUI();
+            closeDashboard();
+            showToast("System Updated Successfully!");
+        }
+
+        // --- User Actions ---
+        function handleDraw() {
+            if(appData.codes.length === 0) {
+                var cBox = document.getElementById('contact-info');
+                cBox.innerHTML = '<p style="margin-bottom:8px;">📞 ဖုန်း: <b>' + appData.phone + '</b></p>' +
+                                 '<p>✈️ Telegram: <b>' + appData.tele + '</b></p>';
+                document.getElementById('out-modal').style.display = 'flex';
+                return;
+            }
+
+            var index = Math.floor(Math.random() * appData.codes.length);
+            var wonCode = appData.codes[index];
+            
+            document.getElementById('disp-code').innerText = wonCode;
+            document.getElementById('result-box').classList.remove('hidden');
+            
+            var b = document.getElementById('draw-btn');
+            b.disabled = true;
+            b.innerText = "ကုဒ်ရယူပြီးပါပြီ";
+            
+            // Used ဖြစ်သွားတဲ့ code ကို list ထဲက ဖယ်ထုတ်မယ်
+            appData.codes.splice(index, 1);
+        }
+
+        function handleCopy() {
+            var codeTxt = document.getElementById('disp-code').innerText;
+            var temp = document.createElement('textarea');
+            temp.value = codeTxt;
+            document.body.appendChild(temp);
+            temp.select();
+            document.execCommand('copy');
+            document.body.removeChild(temp);
+            showToast("Copied to clipboard!");
+        }
+
+        function showToast(msg) {
+            var t = document.getElementById('toast');
+            t.innerText = msg;
+            t.style.display = 'block';
+            setTimeout(function(){ t.style.display = 'none'; }, 2000);
+        }
+    </script>
+</body>
+</html>
+
