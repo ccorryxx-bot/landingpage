@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Moonlight Christmas - Final Version</title>
+    <title>Moonlight Christmas - Persistent Storage</title>
     <link href="https://fonts.googleapis.com/css2?family=Pyidaungsu:wght@400;700&display=swap" rel="stylesheet">
     <style>
         /* Global Styles */
@@ -16,7 +16,7 @@
             overflow-x: hidden;
         }
 
-        /* Fairy Lights Decoration */
+        /* Decoration Styles */
         .fairy-lights {
             position: fixed; top: 0; left: 0; width: 100%; display: flex; 
             justify-content: space-around; padding: 10px 0; z-index: 100; pointer-events: none;
@@ -31,7 +31,6 @@
             100% { opacity: 1; transform: scale(1.2); }
         }
 
-        /* Moon and Stars Background */
         #moon { 
             position: absolute; top: 40px; right: 40px; width: 80px; height: 80px; 
             background: #fff; border-radius: 50%; z-index: 5; 
@@ -40,7 +39,7 @@
         .star-box { position: fixed; inset: 0; pointer-events: none; z-index: 1; }
         .star { position: absolute; background: white; border-radius: 50%; opacity: 0.5; }
 
-        /* Main UI Layout */
+        /* Main UI */
         main { position: relative; z-index: 20; max-width: 800px; margin: 0 auto; padding: 120px 20px 80px; text-align: center; }
         
         .banners { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 40px; }
@@ -55,7 +54,6 @@
         #disp-title { font-size: 3rem; font-weight: 900; margin-bottom: 10px; transition: color 0.3s; }
         #disp-sub { font-size: 1.1rem; color: #94a3b8; margin-bottom: 40px; line-height: 1.6; }
 
-        /* Premium Gift Card Box */
         .gift-card { 
             background: rgba(255,255,255,0.05); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
             padding: 40px; border-radius: 35px; border: 1px solid rgba(250,204,21,0.3);
@@ -67,7 +65,7 @@
             color: white; font-size: 1.2rem; font-weight: bold; border: none; border-radius: 18px; 
             cursor: pointer; box-shadow: 0 10px 20px rgba(220,38,38,0.3);
         }
-        #draw-btn:disabled { background: #475569; opacity: 0.6; box-shadow: none; cursor: not-allowed; }
+        #draw-btn:disabled { background: #475569; opacity: 0.6; cursor: not-allowed; }
 
         #result-box { 
             margin-top: 30px; background: rgba(0,0,0,0.3); padding: 25px; border-radius: 20px; 
@@ -75,14 +73,13 @@
         }
         @keyframes zoomIn { from { transform: scale(0.9); opacity: 0; } to { transform: scale(1); opacity: 1; } }
         
-        .code-label { font-size: 0.8rem; color: #facc15; margin-bottom: 10px; letter-spacing: 2px; }
         #disp-code { font-size: 2.5rem; font-weight: 900; letter-spacing: 3px; color: #fff; text-shadow: 0 0 15px #facc15; }
         #copy-btn { margin-top: 15px; padding: 8px 25px; background: #facc15; border: none; border-radius: 50px; font-weight: bold; cursor: pointer; }
 
         /* Admin Components */
         #admin-btn { position: fixed; bottom: 20px; left: 20px; z-index: 100; opacity: 0.3; cursor: pointer; }
         
-        /* Modals & Dashboard */
+        /* Dashboard & Modals */
         .modal { 
             position: fixed; inset: 0; z-index: 1000; background: rgba(0,0,0,0.9); 
             display: none; align-items: center; justify-content: center; padding: 20px;
@@ -93,17 +90,15 @@
             position: fixed; inset: 0; z-index: 2000; background: #f8fafc; color: #0f172a; 
             display: none; padding: 30px; overflow-y: auto;
         }
-        .dash-container { max-width: 700px; margin: 0 auto; }
         .input-group { margin-bottom: 20px; text-align: left; }
         label { display: block; font-weight: bold; font-size: 0.8rem; color: #64748b; margin-bottom: 5px; }
         input, textarea { width: 100%; padding: 12px; border: 2px solid #e2e8f0; border-radius: 12px; font-family: inherit; }
         
-        .img-upload { border: 2px dashed #cbd5e1; padding: 15px; border-radius: 15px; text-align: center; cursor: pointer; margin-top: 5px; }
+        .img-upload { border: 2px dashed #cbd5e1; padding: 15px; border-radius: 15px; text-align: center; cursor: pointer; }
         .preview-img { width: 100%; height: 80px; object-fit: cover; border-radius: 10px; margin-top: 10px; }
 
         #save-btn { width: 100%; padding: 18px; background: #0f172a; color: white; border: none; border-radius: 15px; font-weight: bold; margin-top: 20px; cursor: pointer; }
         
-        /* Helpers */
         .hidden { display: none !important; }
         #toast { 
             position: fixed; bottom: 40px; left: 50%; transform: translateX(-50%); 
@@ -122,23 +117,18 @@
 
     <main>
         <div class="banners">
-            <div class="banner-item"><img id="img1" src="https://images.unsplash.com/photo-1543589077-47d81606c1bf?w=800"></div>
-            <div class="banner-item"><img id="img2" src="https://images.unsplash.com/photo-1512389142860-9c449e58a543?w=800"></div>
+            <div class="banner-item"><img id="img1" src=""></div>
+            <div class="banner-item"><img id="img2" src=""></div>
         </div>
-
-        <h1 id="disp-title">Merry Christmas</h1>
-        <p id="disp-sub">အားလုံးပဲ ပျော်ရွှင်စရာ ခရစ္စမတ်အခါသမယလေး ဖြစ်ပါစေ။</p>
-
+        <h1 id="disp-title"></h1>
+        <p id="disp-sub"></p>
         <div class="gift-card">
             <button id="draw-btn" onclick="handleDraw()">Gift Code ရယူရန်</button>
-            
             <div id="result-box" class="hidden">
-                <p class="code-label">YOUR SPECIAL CODE</p>
+                <p style="font-size:0.8rem; color:#facc15; margin-bottom:10px;">YOUR SPECIAL CODE</p>
                 <div id="disp-code">-----</div>
                 <button id="copy-btn" onclick="handleCopy()">Copy Code</button>
             </div>
-            
-            <p id="disp-footer" style="margin-top:25px; opacity:0.3; font-size:0.8rem;">- Santa Admin -</p>
         </div>
     </main>
 
@@ -146,7 +136,7 @@
     <div id="login-modal" class="modal">
         <div class="modal-content">
             <h3 style="margin-bottom:15px">Admin Login</h3>
-            <input type="password" id="admin-pw" placeholder="Enter Password" style="text-align:center; font-size:1.2rem;">
+            <input type="password" id="admin-pw" placeholder="စကားဝှက်ရိုက်ပါ" style="text-align:center;">
             <p id="pw-error" class="hidden" style="color:red; font-size:0.8rem; margin:10px 0;">စကားဝှက် မှားယွင်းနေသည်။</p>
             <div style="display:flex; gap:10px; margin-top:20px;">
                 <button onclick="closeModal('login-modal')" style="flex:1; padding:10px; border:none; border-radius:10px;">ပယ်ဖျက်</button>
@@ -167,22 +157,20 @@
 
     <!-- Admin Dashboard -->
     <div id="dashboard">
-        <div class="dash-container">
+        <div style="max-width:700px; margin:0 auto;">
             <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:30px;">
                 <h2>System Dashboard</h2>
                 <button onclick="closeDashboard()" style="padding:8px 15px; border-radius:8px; border:1px solid #ddd; background:white;">ထွက်မည်</button>
             </div>
 
             <div class="input-group">
-                <label>Main Title Text</label>
+                <label>Main Title</label>
                 <input type="text" id="in-title">
             </div>
-
             <div class="input-group">
                 <label>Title Color</label>
-                <input type="color" id="in-color" style="height:50px; padding:5px; cursor:pointer;">
+                <input type="color" id="in-color" style="height:50px;">
             </div>
-
             <div class="input-group">
                 <label>Subtitle Message</label>
                 <textarea id="in-sub" rows="3"></textarea>
@@ -208,81 +196,80 @@
             </div>
 
             <div class="input-group">
-                <label>Gift Codes (တစ်ခုစီကို line ခြားပြီး ရေးပါ)</label>
-                <textarea id="in-codes" rows="5" placeholder="CODE-001&#10;CODE-002"></textarea>
+                <label>Gift Codes (တစ်ကြောင်းချင်းစီ ခွဲရေးပါ)</label>
+                <textarea id="in-codes" rows="5"></textarea>
             </div>
 
             <div class="input-group">
                 <label>Admin Phone</label>
                 <input type="text" id="in-phone">
             </div>
-
             <div class="input-group">
-                <label>Telegram Username</label>
+                <label>Telegram User</label>
                 <input type="text" id="in-tele">
             </div>
 
-            <button id="save-btn" onclick="saveData()">Update System</button>
+            <button id="save-btn" onclick="saveData()">Update & Save Permanently</button>
         </div>
     </div>
 
-    <div id="toast">Saved Successfully!</div>
+    <div id="toast">Saved!</div>
 
     <script>
-        // --- Data State ---
-        var appData = {
+        // --- Default Settings ---
+        const DEFAULTS = {
             title: "Merry Christmas",
             titleColor: "#ffffff",
             sub: "အားလုံးပဲ ပျော်ရွှင်စရာ ခရစ္စမတ်အခါသမယလေး ဖြစ်ပါစေ။",
             img1: "https://images.unsplash.com/photo-1543589077-47d81606c1bf?w=800",
             img2: "https://images.unsplash.com/photo-1512389142860-9c449e58a543?w=800",
-            codes: ["XMAS-GIFT-101", "XMAS-GIFT-202", "XMAS-GIFT-303"],
+            codes: ["GIFT-888-999"],
             phone: "09 123 456 789",
-            tele: "@santa_admin"
+            tele: "@admin"
         };
-        var MASTER_PW = "1234";
 
-        // --- Initialization ---
-        window.onload = function() {
-            initDecorations();
+        let appData = {};
+
+        // --- Load Data From LocalStorage ---
+        function loadSavedData() {
+            const saved = localStorage.getItem('moonlight_xmas_data');
+            if (saved) {
+                appData = JSON.parse(saved);
+            } else {
+                appData = JSON.parse(JSON.stringify(DEFAULTS));
+            }
             refreshUI();
-        };
-
-        function initDecorations() {
-            var lbox = document.getElementById('light-container');
-            var colors = ['#ff4d4d', '#ffd700', '#4caf50', '#3498db', '#ffffff'];
-            for(var i=0; i<20; i++) {
-                var l = document.createElement('div');
-                l.className = 'light';
-                l.style.color = colors[i % colors.length];
-                l.style.animationDelay = (i * 0.1) + 's';
-                lbox.appendChild(l);
-            }
-            var sbox = document.getElementById('star-container');
-            for(var j=0; j<50; j++) {
-                var s = document.createElement('div');
-                s.className = 'star';
-                var size = Math.random() * 2 + 1;
-                s.style.width = size + 'px';
-                s.style.height = size + 'px';
-                s.style.top = Math.random() * 100 + 'vh';
-                s.style.left = Math.random() * 100 + 'vw';
-                sbox.appendChild(s);
-            }
         }
 
-        // --- UI Sync Logic (ဒီအပိုင်းကို အဓိက လက်စသတ်ထားပါတယ်) ---
+        // --- Save Data To LocalStorage ---
+        function saveData() {
+            appData.title = document.getElementById('in-title').value;
+            appData.titleColor = document.getElementById('in-color').value;
+            appData.sub = document.getElementById('in-sub').value;
+            appData.phone = document.getElementById('in-phone').value;
+            appData.tele = document.getElementById('in-tele').value;
+            
+            const rawCodes = document.getElementById('in-codes').value.split('\n');
+            appData.codes = rawCodes.filter(c => c.trim() !== "");
+            
+            // Save to browser memory
+            localStorage.setItem('moonlight_xmas_data', JSON.stringify(appData));
+            
+            refreshUI();
+            closeDashboard();
+            showToast("Saved Permanently!");
+        }
+
         function refreshUI() {
-            // Update Main View
-            var t = document.getElementById('disp-title');
+            // Update Main App
+            const t = document.getElementById('disp-title');
             t.innerText = appData.title;
             t.style.color = appData.titleColor;
             document.getElementById('disp-sub').innerText = appData.sub;
             document.getElementById('img1').src = appData.img1;
             document.getElementById('img2').src = appData.img2;
-            document.getElementById('disp-footer').innerText = "- Santa Admin -";
 
-            // Update Dashboard Inputs to match current data
+            // Update Dashboard Inputs
             document.getElementById('in-title').value = appData.title;
             document.getElementById('in-color').value = appData.titleColor;
             document.getElementById('in-sub').value = appData.sub;
@@ -293,14 +280,42 @@
             document.getElementById('pre2').src = appData.img2;
         }
 
-        // --- File Preview & Store Base64 ---
+        // --- Initialization ---
+        window.onload = function() {
+            loadSavedData();
+            initDecorations();
+        };
+
+        function initDecorations() {
+            const lbox = document.getElementById('light-container');
+            const colors = ['#ff4d4d', '#ffd700', '#4caf50', '#3498db', '#ffffff'];
+            for(let i=0; i<20; i++) {
+                let l = document.createElement('div');
+                l.className = 'light';
+                l.style.color = colors[i % colors.length];
+                l.style.animationDelay = (i * 0.1) + 's';
+                lbox.appendChild(l);
+            }
+            const sbox = document.getElementById('star-container');
+            for(let j=0; j<50; j++) {
+                let s = document.createElement('div');
+                s.className = 'star';
+                let size = Math.random() * 2 + 1;
+                s.style.width = size + 'px';
+                s.style.height = size + 'px';
+                s.style.top = Math.random() * 100 + 'vh';
+                s.style.left = Math.random() * 100 + 'vw';
+                sbox.appendChild(s);
+            }
+        }
+
+        // --- Utils ---
         function previewFile(input, preId) {
             if (input.files && input.files[0]) {
-                var reader = new FileReader();
+                const reader = new FileReader();
                 reader.onload = function(e) {
-                    var b64 = e.target.result;
+                    const b64 = e.target.result;
                     document.getElementById(preId).src = b64;
-                    // လက်ရှိ Dashboard view ထဲမှာတင် သိမ်းထားမယ်
                     if(preId === 'pre1') appData.img1 = b64;
                     if(preId === 'pre2') appData.img2 = b64;
                 };
@@ -308,83 +323,53 @@
             }
         }
 
-        // --- Auth & Modals ---
         function openLogin() { document.getElementById('login-modal').style.display = 'flex'; }
         function closeModal(id) { document.getElementById(id).style.display = 'none'; }
-        
         function checkLogin() {
-            var pw = document.getElementById('admin-pw').value;
-            if(pw === MASTER_PW) {
+            if(document.getElementById('admin-pw').value === "1234") {
                 closeModal('login-modal');
                 document.getElementById('dashboard').style.display = 'block';
                 document.getElementById('admin-pw').value = "";
                 document.getElementById('pw-error').classList.add('hidden');
-                refreshUI(); // Dashboard ဖွင့်တိုင်း current data တွေပြမယ်
             } else {
                 document.getElementById('pw-error').classList.remove('hidden');
             }
         }
-
         function closeDashboard() { document.getElementById('dashboard').style.display = 'none'; }
 
-        // --- Dashboard Action ---
-        function saveData() {
-            // Inputs ထဲက တန်ဖိုးတွေကို appData ဆီ ပြောင်းသိမ်းမယ်
-            appData.title = document.getElementById('in-title').value;
-            appData.titleColor = document.getElementById('in-color').value;
-            appData.sub = document.getElementById('in-sub').value;
-            appData.phone = document.getElementById('in-phone').value;
-            appData.tele = document.getElementById('in-tele').value;
-            
-            var rawCodes = document.getElementById('in-codes').value.split('\n');
-            appData.codes = rawCodes.filter(function(c){ return c.trim() !== ""; });
-            
-            // UI ကို ချက်ချင်း update လုပ်မယ်
-            refreshUI();
-            closeDashboard();
-            showToast("System Updated Successfully!");
-        }
-
-        // --- User Actions ---
         function handleDraw() {
             if(appData.codes.length === 0) {
-                var cBox = document.getElementById('contact-info');
-                cBox.innerHTML = '<p style="margin-bottom:8px;">📞 ဖုန်း: <b>' + appData.phone + '</b></p>' +
-                                 '<p>✈️ Telegram: <b>' + appData.tele + '</b></p>';
+                document.getElementById('contact-info').innerHTML = 
+                    `<p>📞 ဖုန်း: ${appData.phone}</p><p>✈️ Telegram: ${appData.tele}</p>`;
                 document.getElementById('out-modal').style.display = 'flex';
                 return;
             }
-
-            var index = Math.floor(Math.random() * appData.codes.length);
-            var wonCode = appData.codes[index];
-            
-            document.getElementById('disp-code').innerText = wonCode;
+            const idx = Math.floor(Math.random() * appData.codes.length);
+            const win = appData.codes[idx];
+            document.getElementById('disp-code').innerText = win;
             document.getElementById('result-box').classList.remove('hidden');
-            
-            var b = document.getElementById('draw-btn');
-            b.disabled = true;
-            b.innerText = "ကုဒ်ရယူပြီးပါပြီ";
-            
-            // Used ဖြစ်သွားတဲ့ code ကို list ထဲက ဖယ်ထုတ်မယ်
-            appData.codes.splice(index, 1);
+            const btn = document.getElementById('draw-btn');
+            btn.disabled = true;
+            btn.innerText = "ရယူပြီးပါပြီ";
+            appData.codes.splice(idx, 1);
+            localStorage.setItem('moonlight_xmas_data', JSON.stringify(appData));
         }
 
         function handleCopy() {
-            var codeTxt = document.getElementById('disp-code').innerText;
-            var temp = document.createElement('textarea');
-            temp.value = codeTxt;
-            document.body.appendChild(temp);
-            temp.select();
+            const txt = document.getElementById('disp-code').innerText;
+            const el = document.createElement('textarea');
+            el.value = txt;
+            document.body.appendChild(el);
+            el.select();
             document.execCommand('copy');
-            document.body.removeChild(temp);
-            showToast("Copied to clipboard!");
+            document.body.removeChild(el);
+            showToast("Copied!");
         }
 
-        function showToast(msg) {
-            var t = document.getElementById('toast');
-            t.innerText = msg;
-            t.style.display = 'block';
-            setTimeout(function(){ t.style.display = 'none'; }, 2000);
+        function showToast(m) {
+            const t = document.getElementById('toast');
+            t.innerText = m; t.style.display = 'block';
+            setTimeout(() => t.style.display = 'none', 2000);
         }
     </script>
 </body>
