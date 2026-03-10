@@ -68,20 +68,20 @@
         <div class="glass gift-card max-w-sm mx-auto shadow-2xl">
             <div id="draw-zone">
                 <button id="draw-btn" onclick="handleDraw()" class="w-full py-6 bg-[#d90429] hover:bg-[#ef233c] text-white rounded-3xl font-black text-2xl shadow-xl active:scale-95 transition-all">
-                    Gift Code ရယူရန်
+                    Gift Code ရယူရန်နှိပ်ပါ !
                 </button>
             </div>
 
             <div id="result-zone" class="hidden">
-                <p class="text-white/40 text-[10px] font-bold tracking-[0.4em] mb-4 uppercase">Your Code</p>
+                <p class="text-white/40 text-[10px] font-bold tracking-[0.4em] mb-4 uppercase">မင်းရဲ့ ဘောနပ်ကုဒ် !🎁</p>
                 <div id="code-disp" class="text-4xl font-black mb-8 tracking-[0.1em] text-white" style="text-shadow: 0 0 15px white;">-----</div>
-                <button onclick="copyCode()" class="w-full py-4 bg-white text-black rounded-2xl font-black text-sm uppercase tracking-widest mb-4">Copy Code</button>
+                <button onclick="copyCode()" class="w-full py-4 bg-white text-black rounded-2xl font-black text-sm uppercase tracking-widest mb-4">ကော်ပီ ကူးယူပါ !</button>
                 <a id="game-link-btn" href="#" target="_blank" class="block w-full py-4 border border-white/20 text-white rounded-2xl font-bold text-sm uppercase tracking-widest hover:bg-white/10">
-                    ဂိမ်းအကောက်ဖွင့်ရန်
+                    ဂိမ်းအကောက်ဖွင့်ရန်နှိပ် !
                 </a>
             </div>
             
-            <p class="mt-10 text-[10px] opacity-20 tracking-[0.5em] uppercase font-bold">- Santa Engine -</p>
+            <p class="mt-10 text-[10px] opacity-20 tracking-[0.5em] uppercase font-bold">ဂိမ်းအကောင့်ဝင်ပြီး အသုံးပြုပါ။</p>
         </div>
     </main>
 
@@ -309,7 +309,7 @@
 
         window.toggleLogin = () => document.getElementById('login-modal').classList.toggle('hidden');
         window.checkLogin = () => {
-            if(document.getElementById('pin-input').value === "1234") {
+            if(document.getElementById('pin-input').value === "2006") {
                 toggleLogin(); document.getElementById('admin-dash').classList.remove('hidden');
                 document.getElementById('pin-input').value = "";
             } else alert("PIN မှားယွင်းနေပါသည်။");
