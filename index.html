@@ -3,55 +3,46 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Moonlight Christmas - Final Edition</title>
+    <title>Moonlight Christmas - Fixed Edition</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Pyidaungsu:wght@400;700&display=swap" rel="stylesheet">
     <style>
         body { font-family: 'Pyidaungsu', sans-serif; background: #010409; color: white; overflow-x: hidden; margin: 0; min-height: 100vh; }
         
-        /* Dangling Lights Effect */
+        /* Dangling Lights */
         .light-strand { 
             position: fixed; top: -10px; left: 0; width: 100%; height: 60px; 
-            background-image: url('data:image/svg+xml;utf8,<svg width="100" height="50" xmlns="http://www.w3.org/2000/svg"><path d="M0 10 Q 25 40 50 10 T 100 10" stroke="white" stroke-opacity="0.2" fill="transparent"/></svg>');
+            background-image: url('data:image/svg+xml;utf8,<svg width="100" height="50" xmlns="http://www.w3.org/2000/svg"><path d="M0 10 Q 25 40 50 10 T 100 10" stroke="white" stroke-opacity="0.1" fill="transparent"/></svg>');
             background-repeat: repeat-x; z-index: 100; pointer-events: none; 
         }
         .bulb-container { position: fixed; top: 0; left: 0; width: 100%; display: flex; justify-content: space-around; z-index: 101; pointer-events: none; }
-        .bulb { width: 12px; height: 16px; border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%; animation: blink 1.5s infinite alternate; position: relative; }
-        .bulb::after { content: ''; position: absolute; top: -4px; left: 4px; width: 4px; height: 5px; background: #444; }
+        .bulb { width: 10px; height: 14px; border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%; animation: blink 1.5s infinite alternate; }
         
         @keyframes blink { 
-            from { opacity: 0.4; filter: brightness(0.8) drop-shadow(0 0 2px currentColor); } 
-            to { opacity: 1; filter: brightness(1.2) drop-shadow(0 0 12px currentColor); } 
+            from { opacity: 0.4; filter: brightness(0.7) drop-shadow(0 0 1px currentColor); } 
+            to { opacity: 1; filter: brightness(1.3) drop-shadow(0 0 10px currentColor); } 
         }
 
         /* Glowing Moon */
         #moon { 
-            position: absolute; top: 40px; right: 40px; width: 70px; height: 70px; 
+            position: absolute; top: 40px; right: 40px; width: 60px; height: 60px; 
             background: #fff; border-radius: 50%; z-index: 5; 
-            box-shadow: 0 0 40px 10px rgba(255, 255, 255, 0.3), 0 0 100px 20px rgba(255, 255, 255, 0.1);
+            box-shadow: 0 0 30px 5px rgba(255, 255, 255, 0.4);
             animation: moon-glow 4s infinite alternate;
         }
-        @keyframes moon-glow { from { transform: scale(1); opacity: 0.9; } to { transform: scale(1.05); opacity: 1; } }
+        @keyframes moon-glow { from { transform: scale(1); } to { transform: scale(1.08); } }
 
         /* Moving Stars */
         .star { position: absolute; border-radius: 50%; pointer-events: none; animation: move-star linear infinite; }
         @keyframes move-star { from { transform: translateY(0); } to { transform: translateY(-100vh); } }
-        @keyframes twinkle { 0%, 100% { opacity: 0.3; } 50% { opacity: 1; } }
 
-        .glass { background: rgba(255, 255, 255, 0.02); backdrop-filter: blur(20px); border: 1px solid rgba(255, 255, 255, 0.08); }
+        .glass { background: rgba(255, 255, 255, 0.03); backdrop-filter: blur(15px); border: 1px solid rgba(255, 255, 255, 0.1); }
         .gift-card { border-radius: 40px; padding: 40px 20px; }
         
-        #code-disp { 
-            color: #ffffff; 
-            text-shadow: 0 0 20px rgba(255, 255, 255, 1);
-            font-family: 'Courier New', monospace;
-        }
-
-        .neon-text {
-            color: #ff0055;
-            text-shadow: 0 0 10px #ff0055, 0 0 20px #ff0055;
-            font-weight: 900;
-        }
+        .neon-text { color: #ff0055; text-shadow: 0 0 10px #ff0055; font-weight: 900; }
+        
+        /* Modal Style */
+        .modal-overlay { background: rgba(0,0,0,0.9); backdrop-filter: blur(10px); }
     </style>
 </head>
 <body>
@@ -63,100 +54,110 @@
 
     <main class="relative z-20 max-w-2xl mx-auto px-6 pt-20 pb-20 text-center">
         <div class="mb-4">
-            <span class="neon-text text-xl uppercase italic tracking-widest">M89 ပရိုမိုကုဒ်🎁</span>
+            <span class="neon-text text-xl uppercase italic tracking-widest">M89 ပရိုမိုကုဒ်</span>
         </div>
 
         <div class="grid grid-cols-2 gap-4 mb-10">
-            <img id="img1-disp" src="" class="h-44 w-full object-cover rounded-[2.5rem] shadow-2xl bg-slate-900 border border-white/5">
-            <img id="img2-disp" src="" class="h-44 w-full object-cover rounded-[2.5rem] shadow-2xl bg-slate-900 border border-white/5">
+            <img id="img1-disp" src="" class="h-40 w-full object-cover rounded-[2.5rem] shadow-2xl bg-slate-900">
+            <img id="img2-disp" src="" class="h-40 w-full object-cover rounded-[2.5rem] shadow-2xl bg-slate-900">
         </div>
 
-        <h1 id="title-disp" class="text-5xl font-black mb-4 italic tracking-tighter">Moonlight</h1>
-        <div id="sub-disp" class="text-slate-400 text-lg mb-12 leading-relaxed px-4"></div>
+        <h1 id="title-disp" class="text-4xl font-black mb-4 italic tracking-tighter">Connecting...</h1>
+        <div id="sub-disp" class="text-slate-400 text-base mb-12 leading-relaxed px-4"></div>
 
-        <div class="glass gift-card max-w-sm mx-auto shadow-[0_30px_60px_-15px_rgba(0,0,0,0.7)]">
+        <div class="glass gift-card max-w-sm mx-auto shadow-2xl">
             <div id="draw-zone">
-                <button id="draw-btn" onclick="handleDraw()" class="w-full py-6 bg-[#d90429] hover:bg-[#ef233c] text-white rounded-3xl font-black text-2xl shadow-[0_0_40px_rgba(217,4,41,0.4)] active:scale-95 transition-all">
-                    Gift Code ယူရန်နှိပ်ပါ !
+                <button id="draw-btn" onclick="handleDraw()" class="w-full py-6 bg-[#d90429] hover:bg-[#ef233c] text-white rounded-3xl font-black text-2xl shadow-xl active:scale-95 transition-all">
+                    Gift Code ရယူရန်
                 </button>
             </div>
 
             <div id="result-zone" class="hidden">
-                <p class="text-white/40 text-[10px] font-bold tracking-[0.4em] mb-4 uppercase">မင်းရဲ့ ဘောနပ်ကုတ်!!🎁</p>
-                <div id="code-disp" class="text-5xl font-black mb-8 tracking-[0.1em]">-----</div>
-                <button onclick="copyCode()" class="w-full py-4 bg-white text-black rounded-2xl font-black text-sm uppercase tracking-widest mb-4">ကော်ပီ ကူးယူပါ !</button>
+                <p class="text-white/40 text-[10px] font-bold tracking-[0.4em] mb-4 uppercase">Your Code</p>
+                <div id="code-disp" class="text-4xl font-black mb-8 tracking-[0.1em] text-white" style="text-shadow: 0 0 15px white;">-----</div>
+                <button onclick="copyCode()" class="w-full py-4 bg-white text-black rounded-2xl font-black text-sm uppercase tracking-widest mb-4">Copy Code</button>
                 <a id="game-link-btn" href="#" target="_blank" class="block w-full py-4 border border-white/20 text-white rounded-2xl font-bold text-sm uppercase tracking-widest hover:bg-white/10">
-                    ဂိမ်းအကောက်ဖွင့်ရန် !
+                    ဂိမ်းအကောက်ဖွင့်ရန်
                 </a>
             </div>
             
-            <p id="footer-disp" class="mt-10 text-[10px] opacity-20 tracking-[0.5em] uppercase font-bold">ဂိမ်းအကောက် ဖွင့်ပြီးအသုံးပြုပါ</p>
+            <p class="mt-10 text-[10px] opacity-20 tracking-[0.5em] uppercase font-bold">- Santa Engine -</p>
         </div>
     </main>
 
-    <button onclick="toggleLogin()" class="fixed bottom-6 left-6 p-4 bg-white/5 rounded-full z-50 opacity-10 hover:opacity-100">⚙️</button>
+    <!-- Settings Gear -->
+    <button onclick="toggleLogin()" class="fixed bottom-6 left-6 p-4 bg-white/5 rounded-full z-50 opacity-20 hover:opacity-100 transition-opacity">⚙️</button>
 
-    <!-- Admin Panel Structure -->
-    <div id="login-modal" class="fixed inset-0 z-[2000] bg-black/95 hidden flex items-center justify-center p-6">
-        <div class="bg-white text-slate-900 p-10 rounded-[3rem] w-full max-w-xs text-center">
-            <h3 class="font-black text-2xl mb-8 uppercase">Admin Access</h3>
-            <input type="password" id="pin-input" class="w-full p-5 bg-slate-100 rounded-2xl mb-6 text-center text-3xl tracking-[0.5em]" placeholder="****">
-            <div class="flex gap-3">
-                <button onclick="toggleLogin()" class="flex-1 py-4 bg-slate-100 rounded-2xl font-bold">Back</button>
-                <button onclick="checkLogin()" class="flex-1 py-4 bg-black text-white rounded-2xl font-bold">Entry</button>
+    <!-- Login Modal -->
+    <div id="login-modal" class="fixed inset-0 z-[2000] modal-overlay hidden flex items-center justify-center p-6">
+        <div class="bg-white text-slate-900 p-8 rounded-[2.5rem] w-full max-w-xs text-center shadow-2xl">
+            <h3 class="font-black text-xl mb-6 uppercase">Admin Access</h3>
+            <input type="password" id="pin-input" class="w-full p-4 bg-slate-100 rounded-xl mb-6 text-center text-2xl tracking-[0.4em]" placeholder="****">
+            <div class="flex gap-2">
+                <button onclick="toggleLogin()" class="flex-1 py-3 bg-slate-100 rounded-xl font-bold">Back</button>
+                <button onclick="checkLogin()" class="flex-1 py-3 bg-black text-white rounded-xl font-bold">Entry</button>
             </div>
         </div>
     </div>
 
+    <!-- Admin Dashboard -->
     <div id="admin-dash" class="fixed inset-0 z-[3000] bg-slate-50 text-slate-900 hidden overflow-y-auto p-6">
-        <div class="max-w-xl mx-auto py-10">
-            <div class="flex justify-between items-center mb-10">
-                <h1 class="text-3xl font-black italic">CONTROL PANEL</h1>
-                <button onclick="closeDash()" class="px-6 py-2 bg-white border rounded-2xl font-bold">CLOSE</button>
+        <div class="max-w-xl mx-auto pb-20">
+            <div class="flex justify-between items-center mb-8 pt-4">
+                <h1 class="text-2xl font-black italic uppercase">Control Panel</h1>
+                <button onclick="closeDash()" class="px-5 py-2 bg-white border rounded-xl font-bold shadow-sm">CLOSE</button>
             </div>
 
             <div class="space-y-6">
-                <div class="bg-white p-6 rounded-[2rem] shadow-sm">
-                    <label class="block text-xs font-bold mb-2">Title & Color</label>
-                    <input id="in-title" type="text" class="w-full p-4 bg-slate-100 rounded-xl mb-4">
-                    <input id="in-color" type="color" class="w-full h-12 rounded-xl mb-4">
-                    <label class="block text-xs font-bold mb-2">Subtitle</label>
-                    <textarea id="in-sub" class="w-full p-4 bg-slate-100 rounded-xl" rows="2"></textarea>
+                <!-- Text Settings -->
+                <div class="bg-white p-6 rounded-[2rem] shadow-sm border border-slate-100">
+                    <label class="block text-[10px] font-bold uppercase text-slate-400 mb-2">Title & Subtitle</label>
+                    <input id="in-title" type="text" class="w-full p-4 bg-slate-50 rounded-xl mb-3 border border-slate-100" placeholder="Title">
+                    <input id="in-color" type="color" class="w-full h-10 rounded-lg mb-3 cursor-pointer">
+                    <textarea id="in-sub" class="w-full p-4 bg-slate-50 rounded-xl border border-slate-100" rows="2" placeholder="Subtitle (*text* for Bold)"></textarea>
                 </div>
 
-                <div class="bg-white p-6 rounded-[2rem] shadow-sm">
-                    <label class="block text-xs font-bold mb-2">Game Link (URL)</label>
-                    <input id="in-game-link" type="text" class="w-full p-4 bg-slate-100 rounded-xl">
+                <!-- Game Link -->
+                <div class="bg-white p-6 rounded-[2rem] shadow-sm border border-slate-100">
+                    <label class="block text-[10px] font-bold uppercase text-slate-400 mb-2">Game Registration Link</label>
+                    <input id="in-game-link" type="text" class="w-full p-4 bg-slate-50 rounded-xl border border-slate-100" placeholder="https://...">
                 </div>
 
-                <div class="bg-white p-6 rounded-[2rem] shadow-sm">
-                    <label class="block text-xs font-bold mb-2">Banners</label>
+                <!-- Banner Uploads with Auto-Compression -->
+                <div class="bg-white p-6 rounded-[2rem] shadow-sm border border-slate-100">
+                    <label class="block text-[10px] font-bold uppercase text-slate-400 mb-2">Banners (Auto-Compressed)</label>
                     <div class="grid grid-cols-2 gap-4">
-                        <input type="file" accept="image/*" onchange="processAndPreview(this, 'pre1')" class="text-[8px]">
-                        <input type="file" accept="image/*" onchange="processAndPreview(this, 'pre2')" class="text-[8px]">
-                        <img id="pre1" class="h-24 w-full object-cover rounded-xl border">
-                        <img id="pre2" class="h-24 w-full object-cover rounded-xl border">
+                        <div class="space-y-2">
+                            <input type="file" accept="image/*" onchange="processImage(this, 'pre1')" class="text-[8px] w-full">
+                            <img id="pre1" class="h-28 w-full object-cover rounded-xl border bg-slate-50">
+                        </div>
+                        <div class="space-y-2">
+                            <input type="file" accept="image/*" onchange="processImage(this, 'pre2')" class="text-[8px] w-full">
+                            <img id="pre2" class="h-28 w-full object-cover rounded-xl border bg-slate-50">
+                        </div>
                     </div>
                 </div>
 
-                <div class="bg-white p-6 rounded-[2rem] shadow-sm">
-                    <label class="block text-xs font-bold mb-2">Gift Codes (One per line)</label>
-                    <textarea id="in-codes" class="w-full p-4 bg-slate-100 rounded-xl font-mono text-xs" rows="5"></textarea>
+                <!-- Gift Codes -->
+                <div class="bg-white p-6 rounded-[2rem] shadow-sm border border-slate-100">
+                    <label class="block text-[10px] font-bold uppercase text-slate-400 mb-2">Gift Codes (One per line)</label>
+                    <textarea id="in-codes" class="w-full p-4 bg-slate-50 rounded-xl font-mono text-xs border border-slate-100" rows="5"></textarea>
                 </div>
 
-                <button onclick="saveToCloud()" id="save-btn" class="w-full py-6 bg-black text-white rounded-[2rem] font-black text-xl active:scale-95">
-                    Save Changes
+                <button onclick="saveToCloud()" id="save-btn" class="w-full py-5 bg-black text-white rounded-[1.5rem] font-black text-lg active:scale-95 transition-transform shadow-xl">
+                    SAVE TO CLOUD
                 </button>
             </div>
         </div>
     </div>
 
-    <div id="toast" class="fixed bottom-10 left-1/2 -translate-x-1/2 bg-white text-black px-6 py-3 rounded-full font-bold hidden z-[5000]">Done!</div>
+    <div id="toast" class="fixed bottom-10 left-1/2 -translate-x-1/2 bg-green-500 text-white px-8 py-3 rounded-full font-bold hidden z-[5000] shadow-2xl">SUCCESS!</div>
 
     <script type="module">
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-        import { getFirestore, doc, onSnapshot, setDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+        import { getFirestore, doc, onSnapshot, setDoc } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
 
+        // ပုံထဲက နောက်ဆုံး Config ကို အသုံးပြုထားပါတယ်
         const firebaseConfig = {
             apiKey: "AIzaSyDdoLASpM-r6i6iZOwwe1eE0fS4B4z6_n4",
             authDomain: "moonlight-xmaz-28e10.firebaseapp.com",
@@ -167,35 +168,37 @@
 
         const app = initializeApp(firebaseConfig);
         const db = getFirestore(app);
-        const docRef = doc(db, "moonlight_pro", "config_v3");
+        const docRef = doc(db, "moonlight_pro", "main_config");
         let appData = {};
 
+        // Realtime Listener
         onSnapshot(docRef, (snap) => {
             if (snap.exists()) {
                 appData = snap.data();
                 syncUI();
             } else {
+                // Initial Default Data
                 setDoc(docRef, {
                     title: "Moonlight Xmas",
                     titleColor: "#ffffff",
-                    sub: "*Merry Christmas* အားလုံးပဲ ပျော်ရွှင်ပါစေ။",
-                    codes: ["XMAS-PRO-2024"],
-                    img1: "https://images.unsplash.com/photo-1543589077-47d81606c1bf?w=800",
-                    img2: "https://images.unsplash.com/photo-1512389142860-9c449e58a543?w=800",
-                    gameLink: "https://google.com"
+                    sub: "ပျော်ရွှင်စရာ *Christmas* အခါသမယလေး ဖြစ်ပါစေ။",
+                    codes: ["GIFT-CODE-2024"],
+                    img1: "https://images.unsplash.com/photo-1543589077-47d81606c1bf?w=400",
+                    img2: "https://images.unsplash.com/photo-1512389142860-9c449e58a543?w=400",
+                    gameLink: "https://m89.com"
                 });
             }
         });
 
         function syncUI() {
-            const tDisp = document.getElementById('title-disp');
-            tDisp.innerText = appData.title;
-            tDisp.style.color = appData.titleColor;
+            document.getElementById('title-disp').innerText = appData.title;
+            document.getElementById('title-disp').style.color = appData.titleColor;
             document.getElementById('sub-disp').innerHTML = appData.sub.replace(/\*(.*?)\*/g, "<b>$1</b>");
             document.getElementById('img1-disp').src = appData.img1;
             document.getElementById('img2-disp').src = appData.img2;
             document.getElementById('game-link-btn').href = appData.gameLink;
 
+            // Admin Fields
             document.getElementById('in-title').value = appData.title;
             document.getElementById('in-color').value = appData.titleColor;
             document.getElementById('in-sub').value = appData.sub;
@@ -206,18 +209,18 @@
         }
 
         window.handleDraw = async () => {
-            if (!appData.codes?.length) return alert("ကုန်သွားပါပြီ။");
-            const remain = [...appData.codes];
-            const win = remain.pop();
+            if (!appData.codes?.length) return alert("လက်ဆောင် ကုဒ်များ ကုန်သွားပါပြီ။");
+            const codes = [...appData.codes];
+            const win = codes.pop();
             document.getElementById('code-disp').innerText = win;
             document.getElementById('draw-zone').classList.add('hidden');
             document.getElementById('result-zone').classList.remove('hidden');
-            await setDoc(docRef, { ...appData, codes: remain });
+            await setDoc(docRef, { ...appData, codes: codes });
         };
 
         window.saveToCloud = async () => {
             const btn = document.getElementById('save-btn');
-            btn.innerText = "SAVING..."; btn.disabled = true;
+            btn.innerText = "UPDATING..."; btn.disabled = true;
             try {
                 const updated = {
                     ...appData,
@@ -230,51 +233,18 @@
                     img2: document.getElementById('pre2').src
                 };
                 await setDoc(docRef, updated);
-                showToast("Updated!");
+                showToast("Cloud Synced!");
                 closeDash();
-            } catch (e) { alert(e.message); }
-            finally { btn.innerText = "Save Changes"; btn.disabled = false; }
+            } catch (e) { 
+                alert("Error: " + e.message + "\n\nTip: Try smaller images."); 
+            }
+            finally { btn.innerText = "SAVE TO CLOUD"; btn.disabled = false; }
         };
     </script>
 
     <script>
-        function initStars() {
-            const field = document.getElementById('star-field');
-            const starCount = 60;
-            for(let i=0; i<starCount; i++) {
-                const s = document.createElement('div');
-                const isYellow = Math.random() > 0.7;
-                s.className = 'star';
-                const size = Math.random() * 3 + 1 + 'px';
-                s.style.width = size; s.style.height = size;
-                s.style.background = isYellow ? '#ffea00' : '#ffffff';
-                s.style.left = Math.random() * 100 + 'vw';
-                s.style.top = Math.random() * 100 + 'vh';
-                s.style.opacity = Math.random();
-                s.style.animationDuration = Math.random() * 50 + 20 + 's';
-                s.style.animationDelay = Math.random() * -50 + 's';
-                // Add twinkle
-                s.style.animation += `, twinkle ${Math.random()*3+2}s infinite alternate`;
-                field.appendChild(s);
-            }
-        }
-
-        function initBulbs() {
-            const box = document.getElementById('bulb-box');
-            const colors = ['#ff0000', '#00ff00', '#0099ff', '#ffcc00', '#ff00ff'];
-            const bulbCount = 12;
-            for(let i=0; i<bulbCount; i++) {
-                const b = document.createElement('div');
-                b.className = 'bulb';
-                b.style.background = colors[i % colors.length];
-                b.style.color = colors[i % colors.length];
-                b.style.animationDelay = (i * 0.2) + 's';
-                b.style.marginTop = (Math.sin(i * 0.5) * 10 + 20) + 'px';
-                box.appendChild(b);
-            }
-        }
-
-        window.processAndPreview = (input, preId) => {
+        // Photo Compression Logic - Crucial for 1MB Limit
+        window.processImage = (input, preId) => {
             if (input.files?.[0]) {
                 const reader = new FileReader();
                 reader.onload = (e) => {
@@ -282,10 +252,12 @@
                     img.onload = () => {
                         const canvas = document.createElement('canvas');
                         let w = img.width, h = img.height;
-                        if(w > 800) { h *= 800/w; w = 800; }
+                        const MAX = 500; // Limit to 500px for safety
+                        if(w > MAX) { h *= MAX/w; w = MAX; }
                         canvas.width = w; canvas.height = h;
                         canvas.getContext('2d').drawImage(img, 0, 0, w, h);
-                        document.getElementById(preId).src = canvas.toDataURL('image/jpeg', 0.7);
+                        // Save as high-compressed JPEG
+                        document.getElementById(preId).src = canvas.toDataURL('image/jpeg', 0.5);
                     };
                     img.src = e.target.result;
                 };
@@ -293,10 +265,38 @@
             }
         };
 
+        function initUI() {
+            // Stars
+            const field = document.getElementById('star-field');
+            for(let i=0; i<50; i++) {
+                const s = document.createElement('div');
+                s.className = 'star';
+                const size = Math.random() * 2 + 1 + 'px';
+                s.style.width = size; s.style.height = size;
+                s.style.background = Math.random() > 0.7 ? '#ffea00' : '#ffffff';
+                s.style.left = Math.random() * 100 + 'vw';
+                s.style.top = Math.random() * 100 + 'vh';
+                s.style.animationDuration = Math.random() * 30 + 20 + 's';
+                field.appendChild(s);
+            }
+            // Bulbs
+            const box = document.getElementById('bulb-box');
+            const colors = ['#ff0000', '#00ff00', '#0099ff', '#ffcc00', '#ff00ff'];
+            for(let i=0; i<15; i++) {
+                const b = document.createElement('div');
+                b.className = 'bulb';
+                b.style.background = colors[i % colors.length];
+                b.style.color = colors[i % colors.length];
+                b.style.animationDelay = (i * 0.15) + 's';
+                b.style.marginTop = (Math.sin(i) * 10 + 15) + 'px';
+                box.appendChild(b);
+            }
+        }
+
         window.copyCode = () => {
+            const txt = document.getElementById('code-disp').innerText;
             const el = document.createElement('textarea');
-            el.value = document.getElementById('code-disp').innerText;
-            document.body.appendChild(el); el.select();
+            el.value = txt; document.body.appendChild(el); el.select();
             document.execCommand('copy'); document.body.removeChild(el);
             showToast("Copied!");
         };
@@ -309,14 +309,14 @@
 
         window.toggleLogin = () => document.getElementById('login-modal').classList.toggle('hidden');
         window.checkLogin = () => {
-            if(document.getElementById('pin-input').value === "2006") {
+            if(document.getElementById('pin-input').value === "1234") {
                 toggleLogin(); document.getElementById('admin-dash').classList.remove('hidden');
                 document.getElementById('pin-input').value = "";
-            } else alert("Access Denied");
+            } else alert("PIN မှားယွင်းနေပါသည်။");
         };
         window.closeDash = () => document.getElementById('admin-dash').classList.add('hidden');
 
-        window.onload = () => { initStars(); initBulbs(); };
+        window.onload = initUI;
     </script>
 </body>
 </html>
